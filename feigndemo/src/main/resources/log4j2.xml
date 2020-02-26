@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--设置log4j2的自身log级别为warn -->
+<configuration status="warn">
+    <appenders>
+        <console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d][%t][%p][%l] %m%n" />
+        </console>
+    </appenders>
+
+
+
+    <loggers>
+        <logger name="feign.Logger" level="debug" >
+            <appender-ref ref="Console"/>
+        </logger>
+        <root level="error">
+            <appender-ref ref="Console" />
+        </root>
+    </loggers>
+</configuration>
