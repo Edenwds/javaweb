@@ -66,6 +66,11 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.62</version>
 		</dependency>
+		<dependency>
+			<groupId>io.github.openfeign.form</groupId>
+			<artifactId>feign-form</artifactId>
+			<version>3.8.0</version>
+		</dependency>
 
 
 				<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-feign -->

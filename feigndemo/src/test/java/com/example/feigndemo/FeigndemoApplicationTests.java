@@ -8,6 +8,7 @@ import com.example.feigndemo.pojo.ResultPojo;
 import com.example.feigndemo.retryer.MyRetryer;
 import com.example.feigndemo.service.HelloService;
 import feign.*;
+import feign.form.FormEncoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.okhttp.OkHttpClient;
@@ -28,7 +29,8 @@ class FeigndemoApplicationTests {
 			.logger(new Slf4jLogger())
 			.logLevel(Logger.Level.FULL)
 			.client(new OkHttpClient())
-			.encoder(new JacksonEncoder())
+//			.encoder(new JacksonEncoder())
+			.encoder(new FormEncoder())
 			.decoder(new JacksonDecoder())
 			.requestInterceptor(new HeadersInterceptor())
 			.errorDecoder(new CustomErrorDecoder())
@@ -41,7 +43,7 @@ class FeigndemoApplicationTests {
 	}
 
 	@Test
-	public void feignRESTTes() {
+	public void feignRESTTest() {
 		ParamPojo paramPojo = new ParamPojo("peter");
 		System.out.println(service.hello3(paramPojo).toString());
 	}
@@ -107,5 +109,10 @@ class FeigndemoApplicationTests {
 	@Test
 	public void retryerTest() {
 		service.retryerTest();
+	}
+
+	@Test
+	public void postFormTest() {
+		System.out.println(service.hello2Post("tom"));
 	}
 }

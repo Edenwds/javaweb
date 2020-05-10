@@ -43,4 +43,7 @@ public interface HelloService extends CommonService{
     @RequestLine("GET /test/retry")
     String retryerTest();
 
+    @RequestLine("POST /test/hello2")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    ResultPojo hello2Post(@Param("name") String name);
 }
