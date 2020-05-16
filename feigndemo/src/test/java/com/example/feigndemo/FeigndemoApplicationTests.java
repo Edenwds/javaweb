@@ -3,11 +3,13 @@ package com.example.feigndemo;
 import com.alibaba.fastjson.JSONObject;
 import com.example.feigndemo.decoders.CustomErrorDecoder;
 import com.example.feigndemo.interceptor.HeadersInterceptor;
+import com.example.feigndemo.pojo.FilePojo;
 import com.example.feigndemo.pojo.ParamPojo;
 import com.example.feigndemo.pojo.ResultPojo;
 import com.example.feigndemo.retryer.MyRetryer;
 import com.example.feigndemo.service.HelloService;
 import feign.*;
+import feign.form.FormData;
 import feign.form.FormEncoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
@@ -17,6 +19,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,8 +33,8 @@ class FeigndemoApplicationTests {
 			.logLevel(Logger.Level.FULL)
 			.client(new OkHttpClient())
 //			.encoder(new JacksonEncoder())
-			.encoder(new FormEncoder())
-			.decoder(new JacksonDecoder())
+			.encoder(new FormEncoder(new JacksonEncoder()))
+//			.decoder(new JacksonDecoder())
 			.requestInterceptor(new HeadersInterceptor())
 			.errorDecoder(new CustomErrorDecoder())
 			.retryer(new MyRetryer(5))
@@ -114,5 +117,46 @@ class FeigndemoApplicationTests {
 	@Test
 	public void postFormTest() {
 		System.out.println(service.hello2Post("tom"));
+	}
+
+	@Test
+	public void postForm2Test() {
+		ParamPojo paramPojo = new ParamPojo("tom");
+		System.out.println(service.hello2Post2(paramPojo));
+	}
+
+	@Test
+	public void postFileTest() {
+		String path = "/Users/xx/Desktop/net.png";
+		File file = new File(path);
+		String res = service.uploadFile(file);
+		System.out.println(res);
+
+	}
+
+	@Test
+	public void postByteDataTest() {
+		String msg = "hello world";
+		String res = service.uploadByteData(msg.getBytes());
+		System.out.println(res);
+	}
+
+	@Test
+	public void postByFormDataTest() throws IOException {
+		String path = "/Users/xx/Desktop/net.png";
+		File file = new File(path);
+		InputStream inputStream = new FileInputStream(file);
+		byte[] data = new byte[1024 * 1024];
+		inputStream.read(data);
+		FormData formData = new FormData("image/png", "net.png", data);
+		service.uploadByFormData(formData);
+	}
+
+	@Test
+	public void postByPojoTst() {
+		String path = "/Users/xx/Desktop/net.png";
+		File file = new File(path);
+		FilePojo pojo = new FilePojo("1", file);
+		System.out.println(service.uploadByPojo(pojo));
 	}
 }

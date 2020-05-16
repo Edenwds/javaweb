@@ -2,10 +2,13 @@ package com.example.feigndemo.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.feigndemo.expander.DateExpander;
+import com.example.feigndemo.pojo.FilePojo;
 import com.example.feigndemo.pojo.ParamPojo;
 import com.example.feigndemo.pojo.ResultPojo;
 import feign.*;
+import feign.form.FormData;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -46,4 +49,26 @@ public interface HelloService extends CommonService{
     @RequestLine("POST /test/hello2")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     ResultPojo hello2Post(@Param("name") String name);
+
+    @RequestLine("POST /test/hello2")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    ResultPojo hello2Post2(ParamPojo paramPojo);
+
+    @RequestLine("POST /test/file")
+    @Headers("Content-Type: multipart/form-data")
+    String uploadFile(@Param("file") File file);
+
+    @RequestLine("POST /test/byte-data")
+    @Headers("Content-Type: multipart/form-data")
+    String uploadByteData(@Param("bytedata") byte[] data);
+
+    @RequestLine("POST /test/form-data")
+    @Headers("Content-Type: multipart/form-data")
+    String uploadByFormData(@Param("data") FormData formData);
+
+
+    @RequestLine("POST /test/form-pojo")
+    @Headers("Content-Type: multipart/form-data")
+    String uploadByPojo(FilePojo filePojo);
+
 }
